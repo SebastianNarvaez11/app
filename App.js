@@ -1,20 +1,34 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import AppLoading from 'expo-app-loading';
+import { NativeBaseProvider } from 'native-base';
+import Router from './src/router/Router';
+import { Provider } from 'react-redux';
+import store from './src/redux/store';
+import { useFonts, Poppins_400Regular, Poppins_700Bold } from '@expo-google-fonts/poppins'
+import { initAxiosInterceptors } from './src/helpers/initAxiosInterceptor'
+
+
+initAxiosInterceptors()
 
 export default function App() {
+
+
+  let [fontsLoaded] = useFonts({
+    Poppins_400Regular, Poppins_700Bold
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <NativeBaseProvider>
+        <Router />
+        <StatusBar style="auto" />
+      </NativeBaseProvider>
+    </Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
